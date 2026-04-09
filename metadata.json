@@ -1,0 +1,5 @@
+{
+  "name": "电力物联网数据监控平台",
+  "description": "资深B端电力物联网数据上报与分发监控平台，支持趋势分析、告警配置及全链路溯源。",
+  "requestFramePermissions": []
+}
