@@ -194,6 +194,11 @@ export default function AlarmConfigPage() {
   const [ruleDataTypes, setRuleDataTypes] = useState<string[]>([]);
   const [ruleDomains, setRuleDomains] = useState<string[]>([]);
   const [rulePartitions, setRulePartitions] = useState<string[]>([]);
+  
+  const [selectedDevicesPage, setSelectedDevicesPage] = useState(1);
+  const selectedDevicesPageSize = 5;
+  const totalSelectedPages = Math.max(1, Math.ceil(selectedDevices.length / selectedDevicesPageSize));
+  const paginatedSelectedDevices = selectedDevices.slice((selectedDevicesPage - 1) * selectedDevicesPageSize, selectedDevicesPage * selectedDevicesPageSize);
 
   const handleAddDeviceToggle = (device: typeof mockDevices[0]) => {
     if (selectedDevices.find(d => d.id === device.id)) {
@@ -204,7 +209,12 @@ export default function AlarmConfigPage() {
   };
 
   const handleRemoveDevice = (id: number) => {
-    setSelectedDevices(selectedDevices.filter(d => d.id !== id));
+    const newDevices = selectedDevices.filter(d => d.id !== id);
+    setSelectedDevices(newDevices);
+    const newTotalPages = Math.max(1, Math.ceil(newDevices.length / selectedDevicesPageSize));
+    if (selectedDevicesPage > newTotalPages) {
+      setSelectedDevicesPage(newTotalPages);
+    }
   };
 
   const handleBatchRemoveDevices = () => {
@@ -220,6 +230,7 @@ export default function AlarmConfigPage() {
     setRuleDataTypes([]);
     setRuleDomains([]);
     setRulePartitions([]);
+    setSelectedDevicesPage(1);
     setShowAddModal(true);
   };
 
@@ -232,6 +243,7 @@ export default function AlarmConfigPage() {
     setRuleDataTypes(rule.dataTypes || []);
     setRuleDomains(rule.domains || []);
     setRulePartitions(rule.partitions || []);
+    setSelectedDevicesPage(1);
     setShowAddModal(true);
   };
 
@@ -521,7 +533,6 @@ export default function AlarmConfigPage() {
                     <div className="mt-4 border border-gray-200 rounded-lg overflow-hidden">
                       <div className="bg-gray-50 p-2 flex justify-between items-center border-b border-gray-200">
                         <span className="text-sm font-medium text-gray-700">已选设备 ({selectedDevices.length})</span>
-                        <button onClick={handleBatchRemoveDevices} className="text-xs text-red-600 hover:text-red-800">批量删除</button>
                       </div>
                       <div className="max-h-40 overflow-y-auto">
                         <table className="w-full text-left text-sm">
@@ -533,7 +544,7 @@ export default function AlarmConfigPage() {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-gray-100">
-                            {selectedDevices.map(d => (
+                            {paginatedSelectedDevices.map(d => (
                               <tr key={d.id}>
                                 <td className="px-4 py-2">{d.name}</td>
                                 <td className="px-4 py-2">{d.sn}</td>
@@ -544,6 +555,22 @@ export default function AlarmConfigPage() {
                             ))}
                           </tbody>
                         </table>
+                      </div>
+                      <div className="p-2 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+                        <span className="text-xs text-gray-500">共 {selectedDevices.length} 条记录</span>
+                        <nav className="flex gap-1">
+                          <button 
+                            onClick={() => setSelectedDevicesPage(p => Math.max(1, p - 1))}
+                            disabled={selectedDevicesPage === 1}
+                            className="w-6 h-6 flex items-center justify-center rounded border border-gray-200 bg-white text-gray-400 disabled:opacity-50 text-xs"
+                          >&lt;</button>
+                          <button className="w-6 h-6 flex items-center justify-center rounded border border-[#4869F3] bg-[#4869F3] text-white text-xs">{selectedDevicesPage}</button>
+                          <button 
+                            onClick={() => setSelectedDevicesPage(p => Math.min(totalSelectedPages, p + 1))}
+                            disabled={selectedDevicesPage === totalSelectedPages}
+                            className="w-6 h-6 flex items-center justify-center rounded border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 text-xs disabled:opacity-50"
+                          >&gt;</button>
+                        </nav>
                       </div>
                     </div>
                   )}
