@@ -505,7 +505,7 @@ export default function AlarmConfigPage() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-sm font-medium text-gray-700">所属单位</label>
+                      <label className="text-sm font-medium text-gray-700">所属单位 <span className="text-red-500">*</span></label>
                       <input type="text" placeholder="请输入所属单位" className="input-field w-full" />
                     </div>
                     <div className="space-y-1">
@@ -585,11 +585,24 @@ export default function AlarmConfigPage() {
                   <div className="grid grid-cols-2 gap-4">
                     {alarmType === '上报差额告警' ? (
                       <div className="space-y-1 col-span-2">
-                        <label className="text-sm font-medium text-gray-700">差额阈值 (%) <span className="text-red-500">*</span></label>
-                        <div className="flex items-center gap-3">
-                          <input type="number" placeholder="下限" className="input-field w-full" />
-                          <span className="text-gray-400">-</span>
-                          <input type="number" placeholder="上限" className="input-field w-full" />
+                        <label className="text-sm font-medium text-gray-700">阈值配置 <span className="text-red-500">*</span></label>
+                        <div className="flex items-center gap-6">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">统计时间</span>
+                            <input type="number" min="10" placeholder="≥10" className="input-field w-24" />
+                            <select className="input-field w-24">
+                              <option>分钟</option>
+                              <option>小时</option>
+                              <option>天</option>
+                            </select>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">差额阈值</span>
+                            <input type="number" placeholder="下限" className="input-field w-24" />
+                            <span className="text-gray-500">-</span>
+                            <input type="number" placeholder="上限" className="input-field w-24" />
+                            <span className="text-gray-500">%</span>
+                          </div>
                         </div>
                       </div>
                     ) : (

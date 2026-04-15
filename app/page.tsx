@@ -36,11 +36,11 @@ const trendData = [
 ];
 
 const tableData = [
-  { id: 1, name: '变压器监控-01', sn: 'SN20240301001', unit: '广州输电', object: '变压器', type: '量测数据', time: '2024-03-20 10:00', count: 520, ref: 450, diff: 70, percent: '15.5%' },
-  { id: 2, name: '线路巡检-A2', sn: 'SN20240301002', unit: '佛山输电', object: '输电线路', type: '图像数据', time: '2024-03-20 10:00', count: 45, ref: 50, diff: -5, percent: '-10.0%' },
-  { id: 3, name: '气象站-S3', sn: 'SN20240301003', unit: '中山输电', object: '气象站', type: '量测数据', time: '2024-03-20 10:00', count: 380, ref: 440, diff: -60, percent: '-13.6%' },
-  { id: 4, name: '变电站安防-04', sn: 'SN20240301004', unit: '广州输电', object: '变电站', type: '图像数据', time: '2024-03-20 10:00', count: 120, ref: 110, diff: 10, percent: '9.1%' },
-  { id: 5, name: '变压器监控-05', sn: 'SN20240301005', unit: '佛山输电', object: '变压器', type: '量测数据', time: '2024-03-20 10:00', count: 490, ref: 480, diff: 10, percent: '2.1%' },
+  { id: 1, name: '变压器监控-01', sn: 'SN20240301001', unit: '广州输电', object: '变压器', dataCaliber: '量测数据', type: '线路温度', time: '2024-03-20 10:00', count: 520, ref: 450, diff: 70, percent: '15.5%' },
+  { id: 2, name: '线路巡检-A2', sn: 'SN20240301002', unit: '佛山输电', object: '输电线路', dataCaliber: '图像数据', type: '山火', time: '2024-03-20 10:00', count: 45, ref: 50, diff: -5, percent: '-10.0%' },
+  { id: 3, name: '气象站-S3', sn: 'SN20240301003', unit: '中山输电', object: '气象站', dataCaliber: '量测数据', type: '地灾', time: '2024-03-20 10:00', count: 380, ref: 440, diff: -60, percent: '-13.6%' },
+  { id: 4, name: '变电站安防-04', sn: 'SN20240301004', unit: '广州输电', object: '变电站', dataCaliber: '图像数据', type: '雷电', time: '2024-03-20 10:00', count: 120, ref: 110, diff: 10, percent: '9.1%' },
+  { id: 5, name: '变压器监控-05', sn: 'SN20240301005', unit: '佛山输电', object: '变压器', dataCaliber: '量测数据', type: '倾斜率', time: '2024-03-20 10:00', count: 490, ref: 480, diff: 10, percent: '2.1%' },
 ];
 
 const ClearableInput = ({ placeholder }: { placeholder: string }) => {
@@ -63,20 +63,33 @@ const ClearableInput = ({ placeholder }: { placeholder: string }) => {
   );
 };
 
-const ClearableSelect = ({ options, defaultValue = "" }: { options: string[], defaultValue?: string }) => {
+const ClearableSelect = ({ options, defaultValue = "", disabled = false, onChange }: { options: string[], defaultValue?: string, disabled?: boolean, onChange?: (val: string) => void }) => {
   const [val, setVal] = useState(defaultValue);
+  
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newVal = e.target.value;
+    setVal(newVal);
+    if (onChange) onChange(newVal);
+  };
+
+  const handleClear = () => {
+    setVal('');
+    if (onChange) onChange('');
+  };
+
   return (
     <div className="relative">
       <select 
         value={val}
-        onChange={(e) => setVal(e.target.value)}
-        className={`input-field w-full pr-8 appearance-none ${!val ? 'text-gray-400' : 'text-gray-900'}`}
+        onChange={handleChange}
+        disabled={disabled}
+        className={`input-field w-full pr-8 appearance-none ${!val ? 'text-gray-400' : 'text-gray-900'} ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
       >
         <option value="" disabled hidden>请选择</option>
         {options.map(opt => <option key={opt} value={opt} className="text-gray-900">{opt}</option>)}
       </select>
-      {val && (
-        <button onClick={() => setVal('')} className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+      {val && !disabled && (
+        <button onClick={handleClear} className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
           <X className="w-4 h-4" />
         </button>
       )}
@@ -193,6 +206,7 @@ export default function MonitoringPage() {
     { id: 2, name: '全量图像监控', date: '2024-03-18' },
   ]);
   const [templateName, setTemplateName] = useState('');
+  const [dataCaliber, setDataCaliber] = useState('');
 
   const handleSaveTemplate = () => {
     if (!templateName) return;
@@ -227,12 +241,12 @@ export default function MonitoringPage() {
             <ClearableInput placeholder="请输入物联标识码" />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">数据类型</label>
-            <ClearableSelect options={['地灾', '雷电', '倾斜率', '倾角', '山火']} />
+            <label className="text-sm font-medium text-gray-700">数据口径</label>
+            <ClearableSelect options={['量测数据', '图像数据']} onChange={setDataCaliber} />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">数据口径</label>
-            <ClearableSelect options={['量测数据', '图像数据']} />
+            <label className="text-sm font-medium text-gray-700">数据类型</label>
+            <ClearableSelect options={['地灾', '雷电', '倾斜率', '倾角', '山火', '线路温度']} disabled={dataCaliber === '图像数据'} />
           </div>
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">所属单位</label>
@@ -446,6 +460,7 @@ export default function MonitoringPage() {
                 <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">物联标识码</th>
                 <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">所属单位</th>
                 <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">监测对象</th>
+                <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">数据口径</th>
                 <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">数据类型</th>
                 <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">上报数</th>
                 <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">参考值</th>
@@ -460,9 +475,10 @@ export default function MonitoringPage() {
                   <td className="px-6 py-3 text-sm text-gray-500">{row.sn}</td>
                   <td className="px-6 py-3 text-sm text-gray-600">{row.unit}</td>
                   <td className="px-6 py-3 text-sm text-gray-600">{row.object}</td>
+                  <td className="px-6 py-3 text-sm text-gray-600">{row.dataCaliber}</td>
                   <td className="px-6 py-3">
                     <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
-                      row.type === '量测数据' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'
+                      row.dataCaliber === '量测数据' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'
                     }`}>
                       {row.type}
                     </span>
