@@ -9,7 +9,8 @@ import {
   Bell,
   Clock,
   Filter,
-  X
+  X,
+  Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -462,6 +463,10 @@ export default function AlarmConfigPage() {
                         <option value="" disabled hidden>请选择告警类型</option>
                         <option value="上报差额告警">上报差额告警</option>
                         <option value="超时未上报告警">超时未上报告警</option>
+                        <option value="分发次数差额告警">分发次数差额告警</option>
+                        <option value="超时未分发告警">超时未分发告警</option>
+                        <option value="数据时延告警">数据时延告警</option>
+                        <option value="上报数据缺失告警">上报数据缺失告警</option>
                       </select>
                     </div>
                     <div className="space-y-1 col-span-2">
@@ -583,7 +588,7 @@ export default function AlarmConfigPage() {
                     阈值配置
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
-                    {alarmType === '上报差额告警' ? (
+                    {(alarmType === '上报差额告警' || alarmType === '分发次数差额告警') ? (
                       <div className="space-y-1 col-span-2">
                         <label className="text-sm font-medium text-gray-700">阈值配置 <span className="text-red-500">*</span></label>
                         <div className="flex items-center gap-6">
@@ -605,7 +610,7 @@ export default function AlarmConfigPage() {
                           </div>
                         </div>
                       </div>
-                    ) : (
+                    ) : (alarmType === '超时未上报告警' || alarmType === '超时未分发告警') ? (
                       <div className="space-y-1 col-span-2">
                         <label className="text-sm font-medium text-gray-700">超时阈值 <span className="text-red-500">*</span></label>
                         <div className="flex gap-2">
@@ -617,7 +622,48 @@ export default function AlarmConfigPage() {
                           </select>
                         </div>
                       </div>
-                    )}
+                    ) : alarmType === '数据时延告警' ? (
+                      <div className="space-y-1 col-span-2">
+                        <label className="text-sm font-medium text-gray-700">时延阈值 <span className="text-red-500">*</span></label>
+                        <div className="flex flex-col gap-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600 w-32">接收-处理时延阈值</span>
+                            <input type="number" placeholder="请输入阈值" className="input-field flex-1" />
+                            <select className="input-field w-24">
+                              <option>秒</option>
+                              <option>分钟</option>
+                            </select>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600 w-32">处理-分发时延阈值</span>
+                            <input type="number" placeholder="请输入阈值" className="input-field flex-1" />
+                            <select className="input-field w-24">
+                              <option>秒</option>
+                              <option>分钟</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    ) : alarmType === '上报数据缺失告警' ? (
+                      <div className="space-y-1 col-span-2">
+                        <label className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                          对比时间 <span className="text-red-500">*</span>
+                          <div className="relative group flex items-center">
+                            <Info className="w-4 h-4 text-gray-400 hover:text-gray-600 cursor-help" />
+                            <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-gray-900 text-white text-xs p-2 rounded shadow-lg z-50">
+                              因图像量测数据和图像文件上报时间存在差异，所以需配置一致性对比时间，若在超时仍未对比成功，则产生告警。
+                            </div>
+                          </div>
+                        </label>
+                        <div className="flex gap-2">
+                          <input type="number" placeholder="请输入对比时间" className="input-field flex-1" />
+                          <select className="input-field w-24">
+                            <option>秒(s)</option>
+                            <option>分钟(min)</option>
+                          </select>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </section>
               </div>

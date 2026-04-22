@@ -23,7 +23,11 @@ const mockTraceData = [
     dispatchTime: '2024-03-20 10:30:25',
     target: '城北生产管理系统',
     status: '失败',
-    total: '13s'
+    total: '13s',
+    time1: '3s',
+    threshold1: '5s',
+    time2: '10s',
+    threshold2: '2s'
   },
   { 
     id: 'MSG_20240320_001', 
@@ -33,7 +37,11 @@ const mockTraceData = [
     dispatchTime: '2024-03-20 10:00:12',
     target: '城北生产管理系统',
     status: '成功',
-    total: '7s'
+    total: '7s',
+    time1: '3s',
+    threshold1: '5s',
+    time2: '4s',
+    threshold2: '5s'
   },
 ];
 
@@ -266,8 +274,12 @@ export default function TraceabilityPage() {
                     </div>
                   </div>
 
-                  <div className="pt-8 text-gray-300">
+                  <div className="pt-8 text-gray-300 flex flex-col items-center">
                     <ArrowRight className="w-6 h-6" />
+                    <div className="mt-2 text-[10px] text-gray-500 text-center whitespace-nowrap bg-white px-1">
+                      <span className={parseInt(selectedMsg.time1) > parseInt(selectedMsg.threshold1) ? "text-red-500 font-bold" : ""}>耗时: {selectedMsg.time1}</span><br/>
+                      <span className="text-gray-400">阈值: {selectedMsg.threshold1}</span>
+                    </div>
                   </div>
 
                   {/* Node 2: Process */}
@@ -281,8 +293,12 @@ export default function TraceabilityPage() {
                     </div>
                   </div>
 
-                  <div className="pt-8 text-gray-300">
+                  <div className="pt-8 text-gray-300 flex flex-col items-center">
                     <ArrowRight className="w-6 h-6" />
+                    <div className="mt-2 text-[10px] text-gray-500 text-center whitespace-nowrap bg-white px-1">
+                      <span className={parseInt(selectedMsg.time2) > parseInt(selectedMsg.threshold2) ? "text-red-500 font-bold" : ""}>耗时: {selectedMsg.time2}</span><br/>
+                      <span className="text-gray-400">阈值: {selectedMsg.threshold2}</span>
+                    </div>
                   </div>
 
                   {/* Node 3: Dispatch */}
