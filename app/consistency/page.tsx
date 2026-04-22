@@ -12,8 +12,8 @@ import { motion, AnimatePresence } from 'motion/react';
 
 const mockConsistencyData = [
   { id: 1, name: '湿度传感器222', sn: 'SN20240301001', measureId: 'M_20260421_001', fileId: 'F_20260421_001', folder: '/uploads/2026/04/21', filename: 'img_sensor_001.jpg', status: '一致', measureTime: '2026-04-21 10:30:12', fileTime: '2026-04-21 10:30:15' },
-  { id: 2, name: '温度传感器111', sn: 'SN20240301002', measureId: 'M_20260421_002', fileId: 'F_20260421_002', folder: '/uploads/2026/04/21', filename: 'img_sensor_002.jpg', status: '不一致', measureTime: '2026-04-21 10:45:00', fileTime: '2026-04-21 11:00:20' },
-  { id: 3, name: '倾角传感器A', sn: 'SN20240301003', measureId: 'M_20260421_003', fileId: '-', folder: '-', filename: '-', status: '不一致', measureTime: '2026-04-21 11:15:30', fileTime: '-' },
+  { id: 2, name: '温度传感器111', sn: 'SN20240301002', measureId: 'M_20260421_002', fileId: 'F_20260421_002', folder: '/uploads/2026/04/21', filename: 'img_sensor_002.jpg', status: '一致', measureTime: '2026-04-21 10:45:00', fileTime: '2026-04-21 11:00:20' },
+  { id: 3, name: '倾角传感器A', sn: 'SN20240301003', measureId: 'M_20260421_003', fileId: '-', folder: '/uploads/2026/04/21', filename: 'cam_a_003.jpg', status: '不一致', measureTime: '2026-04-21 11:15:30', fileTime: '-' },
   { id: 4, name: '摄像头B', sn: 'SN20240301004', measureId: '-', fileId: 'F_20260421_004', folder: '/img/2026/04', filename: 'cam_b_01.png', status: '不一致', measureTime: '-', fileTime: '2026-04-21 12:05:10' },
 ];
 
@@ -168,7 +168,7 @@ export default function ConsistencyPage() {
             <Download className="w-4 h-4" /> 导出
           </button>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto pb-48">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
@@ -191,8 +191,8 @@ export default function ConsistencyPage() {
                   <td className="px-6 py-3">
                     <div className="relative group/id inline-block">
                       <span className="text-sm font-mono text-gray-700 border-b border-dashed border-gray-400 cursor-help">{row.measureId}</span>
-                      <div className="hidden group-hover/id:block absolute bottom-full left-0 mb-2 w-72 bg-gray-900 text-gray-200 text-xs rounded-lg shadow-xl p-4 z-50">
-                        <p className="font-bold text-white mb-2 flex items-center gap-1 border-b border-gray-700 pb-2"><FileJson className="w-3 h-3" /> 量测数据原始JSON</p>
+                      <div className="hidden group-hover/id:block absolute top-[120%] left-0 mt-2 w-72 bg-gray-900 text-gray-200 text-xs rounded-lg shadow-xl p-4 z-[9999]">
+                        <p className="font-bold text-white mb-2 flex items-center gap-1 border-b border-gray-700 pb-2"><FileJson className="w-3 h-3" /> 量测数据原始记录</p>
                         <pre className="font-mono whitespace-pre-wrap">
                           {`{\n  "id": "${row.measureId}",\n  "value": 25.4,\n  "unit": "C"\n}`}
                         </pre>
@@ -202,8 +202,8 @@ export default function ConsistencyPage() {
                   <td className="px-6 py-3">
                     <div className="relative group/id inline-block">
                       <span className="text-sm font-mono text-gray-700 border-b border-dashed border-gray-400 cursor-help">{row.fileId}</span>
-                      <div className="hidden group-hover/id:block absolute bottom-full left-0 mb-2 w-72 bg-gray-900 text-gray-200 text-xs rounded-lg shadow-xl p-4 z-50">
-                        <p className="font-bold text-white mb-2 flex items-center gap-1 border-b border-gray-700 pb-2"><FileJson className="w-3 h-3" /> 图像文件原始JSON</p>
+                      <div className="hidden group-hover/id:block absolute top-[120%] left-0 mt-2 w-72 bg-gray-900 text-gray-200 text-xs rounded-lg shadow-xl p-4 z-[9999]">
+                        <p className="font-bold text-white mb-2 flex items-center gap-1 border-b border-gray-700 pb-2"><FileJson className="w-3 h-3" /> 图像文件原始记录</p>
                         <pre className="font-mono whitespace-pre-wrap">
                           {`{\n  "id": "${row.fileId}",\n  "size": "2.4MB",\n  "type": "image/jpeg"\n}`}
                         </pre>

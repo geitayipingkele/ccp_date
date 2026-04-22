@@ -650,7 +650,7 @@ export default function AlarmConfigPage() {
                           对比时间 <span className="text-red-500">*</span>
                           <div className="relative group flex items-center">
                             <Info className="w-4 h-4 text-gray-400 hover:text-gray-600 cursor-help" />
-                            <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-gray-900 text-white text-xs p-2 rounded shadow-lg z-50">
+                            <div className="hidden group-hover:block absolute bottom-full left-0 mb-2 w-64 bg-gray-900 text-white text-xs p-2 rounded shadow-lg z-50">
                               因图像量测数据和图像文件上报时间存在差异，所以需配置一致性对比时间，若在超时仍未对比成功，则产生告警。
                             </div>
                           </div>

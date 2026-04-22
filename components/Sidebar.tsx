@@ -19,12 +19,12 @@ const navItems = [
     icon: LayoutDashboard,
     children: [
       { name: '数据上报监控', href: '/' },
-      { name: '数据分发监控', href: '/distribute' },
+      { name: '数据一致性监控', href: '/consistency' },
     ]
   },
   {
-    name: '数据一致性监控',
-    href: '/consistency',
+    name: '数据分发监控',
+    href: '/distribute',
     icon: Database,
   },
   {
